@@ -42,6 +42,8 @@ This project is part of the Boot.dev curriculum, which teaches backend developme
 
 If you want to learn by building real projects (like this game), check them out at Boot.dev.
 
+```
+
 
           .       .        *        .       .
    .        .         .         .       .       *
@@ -57,3 +59,5 @@ If you want to learn by building real projects (like this game), check them out 
                                            
           ASTEROIDS • PYTHON • PYGAME
               Crafted with Boot.dev
+
+```
