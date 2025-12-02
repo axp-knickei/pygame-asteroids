@@ -9,7 +9,7 @@ Before using any Pygame functionality, I need to:
 import pygame
 
 pygame.init()
-``
+```
 
 Key points:
 
@@ -260,5 +260,3 @@ From Chapter 1 through Chapter 2, Lesson 3, the main takeaways are:
 - How to manage branches, commits, and pushes in Git/GitHub.
 
 All of this forms the foundation for more advanced features in the Asteroids game: movement, collisions, scoring, and beyond.
-
-
