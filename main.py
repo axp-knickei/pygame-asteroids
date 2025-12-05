@@ -20,9 +20,6 @@ def main():
     AsteroidField.containers = (updatable,)
 
     # create a new empty `pygame.sprite.Group`
-
-
-
     asteroid_field = AsteroidField()
 
     # create the a `Player` object and passing values to the constructor to spawn it in the middle of the screen
