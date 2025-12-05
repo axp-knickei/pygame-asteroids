@@ -40,6 +40,12 @@ Clone the repository and install dependencies (using `uv` as in the course):
 uv run main.py
 ```
 
+
+```bash
+source .venv/bin/activate
+```
+
+
 This will open the game window and start the regulated game loop at 60 FPS.
 Close the window or press `Ctrl+C` in the terminal to stop.
 
