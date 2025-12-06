@@ -1,13 +1,13 @@
 import pygame
 from circleshape import CircleShape
-from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, SHOT_RADIUS
+from constants import PLAYER_RADIUS, LINE_WIDTH, PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOOT_SPEED, SHOT_RADIUS, PLAYER_SHOOT_COOLDOWN_SECONDS
 from shot import Shot
 
 class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
-        
+        self.shot_cooldown = 0 #timer for cooldown start with a value of 0
 
     # in the Player class
     def triangle(self):
@@ -22,6 +22,11 @@ class Player(CircleShape):
         self.rotation = self.rotation + (PLAYER_TURN_SPEED * dt)
 
     def update(self, dt):
+        if self.shot_cooldown > 0:
+            self.shot_cooldown -= dt
+            if self.shot_cooldown < 0:
+                self.shoot_cooldown = 0
+
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]:
@@ -46,18 +51,28 @@ class Player(CircleShape):
         self.position += rotated_with_speed_vector
 
     def shoot(self):
-        # 1. Create the new shot (bullet) at the player's current position
+        # 1. Check if we are still cooling down
+        if self.shot_cooldown > 0:
+            return # too soon, do nothing
+
+        # 2. Start cooldown
+        self.shot_cooldown = PLAYER_SHOOT_COOLDOWN_SECONDS
+
+        # 3. Actually create and fire the shoot
+        # 3.1. Create the new shot (bullet) at the player's current position
         new_shot = Shot(self.position.x, self.position.y, SHOT_RADIUS)
         
-        # 2. Figure out the bullet's direction and speed (velocity)
+        # 3.2. Figure out the bullet's direction and speed (velocity)
         base_direction = pygame.Vector2(0, 1)
         rotated_direction = base_direction.rotate(self.rotation)
         final_velocity_vector = rotated_direction * PLAYER_SHOOT_SPEED
 
-        # 3. Tell the new shot to use this calculated velocity
+        # 3.3. Tell the new shot to use this calculated velocity
         new_shot.velocity = final_velocity_vector
 
-        # Alternative
+
+
+        # Alternative implementation
         # 1. Create the new Shot (bullet) at the player's current position
         # > new_shot = Shot(self.position.x, self.position.y, SHOT_RADIUS)
 
