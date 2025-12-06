@@ -29,5 +29,16 @@ class Asteroid(CircleShape):
             return
         else:
             log_event("asteroid_split")
-            angle = random.uniform(20, 50)
+            split_angle = random.uniform(20, 50)
+            velocity_vector1 = self.velocity.rotate(split_angle)
+            velocity_vector2 = self.velocity.rotate(-split_angle)
+            splitted_aste_radius = self.radius - ASTEROID_MIN_RADIUS
+
+            asteroid1 = Asteroid(self.position.x, self.position.y, splitted_aste_radius)
+            asteroid1.velocity = velocity_vector1 * 1.2
+            
+            asteroid2 = Asteroid(self.position.x, self.position.y, splitted_aste_radius)
+            asteroid2.velocity = velocity_vector2 * 1.2
+
+
 
