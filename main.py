@@ -1,9 +1,11 @@
+import sys
 import pygame
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
-from logger import log_state
+from logger import log_state, log_event
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
+
 
 def main():
     pygame.init()
@@ -40,14 +42,18 @@ def main():
 
         screen.fill("black")
         
-        # player.update(dt) .. This is working initially before using groups
-        updatable.update(dt)
+        updatable.update(dt) # UPDATE STEP
+
+        # >>> collision check should go here <<<
+        for asteroid in asteroids:
+            if player.collides_with(asteroid):
+                log_event("player_hit")
+                print("Game over!")
+                sys.exit()
 
         for sprite in drawable:
             sprite.draw(screen)
         
-        # Call the `.update` method on the "updateables" group! Why we want to call the `.update` method on "updateable" group?
-        # player.draw(screen)
                
         pygame.display.flip()
 
