@@ -25,7 +25,17 @@ class Player(CircleShape):
         if self.shot_cooldown > 0:
             self.shot_cooldown -= dt
             if self.shot_cooldown < 0:
-                self.shoot_cooldown = 0
+                self.shot_cooldown = 0 # Correction on typo shoot -> shot
+        
+        # `dt` is "how many seconds passed since the last frame".
+        # Each frame, if `shot_cooldown` is above `0`, we substract `dt`.
+        # This makes the number slowly count down to zero.
+        # When the timer is `0` or less, the weapon is ready again
+
+        # or in other alternative for thinking
+        # "Every frame, I ask: is my cooldown above zero?"
+        # If yes, "Tick it down by `dt`"
+        # If it goes below zero: clamp it to exactly zero to keep it clean
 
         keys = pygame.key.get_pressed()
 
@@ -50,7 +60,7 @@ class Player(CircleShape):
         rotated_with_speed_vector = rotated_vector * PLAYER_SPEED * dt
         self.position += rotated_with_speed_vector
 
-    def shoot(self):
+    def shoot(self): # check -> set cooldown -> create bullet
         # 1. Check if we are still cooling down
         if self.shot_cooldown > 0:
             return # too soon, do nothing
@@ -70,7 +80,32 @@ class Player(CircleShape):
         # 3.3. Tell the new shot to use this calculated velocity
         new_shot.velocity = final_velocity_vector
 
-
+        ## Quick mental simulation
+        # Imagine:
+        #
+        # - At the start: `shot_cooldown = 0`.
+        #
+        # Frame 1:
+        #
+        # - You press space.
+        # - `update` sees `shot_cooldown == 0`, doesn’t subtract anything.
+        # - `shoot` is called:
+        #    - `shot_cooldown > 0`? No → continue.
+        #    - Set `shot_cooldown = 0.3`.
+        #    - Spawn a bullet.
+        #    
+        # Next frame (dt = 0.1):
+        #
+        # - `update`:
+        #    - `shot_cooldown > 0` → `0.3 - 0.1 = 0.2`.
+        # - You press space again:
+        #    - `shoot`:
+        #        - `shot_cooldown > 0`? Yes (0.2) → return, no bullet.
+        #
+        # After 3 frames of 0.1s each:
+        #
+        # - `shot_cooldown` goes: 0.3 → 0.2 → 0.1 → 0.0
+        # - Once it hits 0, the next time you press space, you can shoot again. 
 
         # Alternative implementation
         # 1. Create the new Shot (bullet) at the player's current position
